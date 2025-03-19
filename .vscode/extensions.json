@@ -1,0 +1,20 @@
+{
+	"recommendations": [
+		"streetsidesoftware.code-spell-checker",
+		"ms-azuretools.vscode-docker",
+		"dotenv.dotenv-vscode",
+		"usernamehw.errorlens",
+		"ms-vscode.vscode-typescript-next",
+		"stringham.move-ts",
+		"fivepointseven.node-version",
+		"idered.npm",
+		"christian-kohler.path-intellisense",
+		"codeandstuff.package-json-upgrade",
+		"esbenp.prettier-vscode",
+		"prisma.prisma",
+		"mariusschulz.yarn-lock-syntax",
+		"rxliuli.tsx",
+		"pmneo.tsimporter",
+		"gamunu.vscode-yarn"
+	]
+}
