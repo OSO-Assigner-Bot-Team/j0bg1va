@@ -13,5 +13,5 @@ jobs:
         steps:
             - uses: actions/checkout@v4
 
-            - run: docker build --tag ninjaninja140/ts-template .
+            - run: docker compose build
               name: Running test docker build

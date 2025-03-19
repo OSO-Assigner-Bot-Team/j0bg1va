@@ -1,8 +1,0 @@
-version: '3.8'
-name: ninjaninja140-ts-template
-
-services:
-    app:
-        image: ninjaninja140/ts-template
-        container_name: ninjaninja140-ts-template
-        restart: always

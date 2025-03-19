@@ -1,12 +1,8 @@
 {
-	"name": "@ninjaninja140/node-ts-template",
+	"name": "@j0bg1va/application",
 	"packageManager": "yarn@4.7.0",
+	"private": true,
 	"version": "1.0.0",
-	"repository": "https://github.com/ninjaninja140/nodejs-template-ts",
-	"author": {
-		"name": "ninjaninja140",
-		"url": "https://github.com/ninjaninja140"
-	},
 	"main": "dist/index.js",
 	"type": "module",
 	"imports": {
@@ -20,8 +16,8 @@
 		"start": "yarn node ./dist/index.js",
 		"test": "yarn tsx watch ./src/index.ts",
 		"compile": "yarn tsc",
-		"build": "docker build --tag ninjaninja140/ts-template .",
-		"up": "docker compose -f compose.yml up -d"
+		"build": "docker compose build",
+		"up": "docker compose up --detach --remove-orphans"
 	},
 	"devDependencies": {
 		"@bracketed/typescript-config": "^4.4.0",

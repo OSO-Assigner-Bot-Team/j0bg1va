@@ -1,0 +1,11 @@
+version: '3.8'
+name: j0bg1va
+
+services:
+    app:
+        image: j0bg1va/application:latest
+        container_name: J0BG1VA
+        restart: always
+        build:
+            context: .
+            dockerfile: Dockerfile
