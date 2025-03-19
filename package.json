@@ -2,7 +2,7 @@
 	"name": "@j0bg1va/application",
 	"packageManager": "yarn@4.7.0",
 	"private": true,
-	"version": "1.0.0",
+	"version": "0.0.0",
 	"main": "dist/index.js",
 	"type": "module",
 	"imports": {
