@@ -1,6 +1,6 @@
 {
 	"name": "@ninjaninja140/node-ts-template",
-	"packageManager": "yarn@4.0.2",
+	"packageManager": "yarn@4.7.0",
 	"version": "1.0.0",
 	"repository": "https://github.com/ninjaninja140/nodejs-template-ts",
 	"author": {
@@ -25,9 +25,9 @@
 	},
 	"devDependencies": {
 		"@bracketed/typescript-config": "^4.4.0",
-		"@types/node": "^20.10.5",
-		"prettier": "^3.1.1",
-		"tsx": "^4.7.0",
-		"typescript": "^5.3.3"
+		"@types/node": "^22.13.10",
+		"prettier": "^3.5.3",
+		"tsx": "^4.19.3",
+		"typescript": "^5.8.2"
 	}
 }
