@@ -32,4 +32,4 @@ jobs:
        env:
          SAMPLE_DIGEST: ${{ steps.push.outputs.digest }}
        with:
-         token: ${{ secrets.DIGITAL_OCEAN_API }} 
+         token: ${{ secrets.TOKEN }} 
