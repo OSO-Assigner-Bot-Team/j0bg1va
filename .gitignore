@@ -1,6 +1,9 @@
 # Database
 jobs.db
 
+# Built .js files
+*.js
+
 # Logs
 logs
 *.log
