@@ -4,7 +4,7 @@ name: j0bg1va
 services:
     app:
         image: j0bg1va/application:latest
-        container_name: J0BG1VA
+        container_name: j0bg1va
         restart: always
         build:
             context: .
