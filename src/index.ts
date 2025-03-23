@@ -15,7 +15,6 @@
 	
 */
 
-import process from 'node:process';
 import console from 'node:console';
 
 console.log('Welcome to my script!');
