@@ -18,6 +18,7 @@ Soon:tm:
 - Discord integration
 - SQlite for database (What ORM?)
 - Google Spreadsheet to input output data. 
+- oso google drive is used for holding attachments and accesing spreadsheet
 - Periodically sync database and spreadsheet (how often?)
 - Jobs need to handle multiple types of jobs
 	- Things that basic automaton will create a thread:
