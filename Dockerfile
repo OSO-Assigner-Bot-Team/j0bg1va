@@ -24,4 +24,6 @@ RUN chown node:node /usr/src/app
 
 USER node
 
+EXPOSE 8080
+
 CMD ["yarn", "run", "start"]
