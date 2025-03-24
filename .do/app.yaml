@@ -1,6 +1,6 @@
 name: j0bg1va
 services:
-- environment_slug: node-js
+- environment_slug: docker
   github:
     branch: main
     deploy_on_push: true
