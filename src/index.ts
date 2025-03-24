@@ -14,7 +14,15 @@
 	@name ts-docker-template
 	
 */
+import http from 'http';
 
-import console from 'node:console';
+const PORT = process.env.PORT || 8080;
 
-console.log('Welcome to my script!');
+const server = http.createServer((req, res) => {
+  res.writeHead(200, { 'Content-Type': 'text/plain' });
+  res.end('J0BG1VA ONLINE BEEP BOOP!');
+});
+
+server.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
