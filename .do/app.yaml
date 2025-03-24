@@ -1,9 +1,9 @@
 name: j0bg1va
+
 services:
-- environment_slug: docker
-  github:
-    branch: main
-    deploy_on_push: true
-    repo: OSO-Assigner-Bot-Team/j0bg1va
+  - name: j0bg1va
+    github:
+      repo: OSO-Assigner-Bot-Team/j0bg1va
+      branch: main
+      deploy_on_push: true
     dockerfile_path: main/Dockerfile
-  name: j0bg1va
