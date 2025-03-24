@@ -4,5 +4,5 @@ services:
   github:
     branch: main
     deploy_on_push: true
-    repo: { secrets.REPO_NAME }
+    repo: OSO-Assigner-Bot-Team/j0bg1va
   name: Build, Push and Deploy a Docker Image
