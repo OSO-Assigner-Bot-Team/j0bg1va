@@ -5,4 +5,5 @@ services:
     branch: main
     deploy_on_push: true
     repo: OSO-Assigner-Bot-Team/j0bg1va
+    dockerfile_path: main/Dockerfile
   name: j0bg1va
