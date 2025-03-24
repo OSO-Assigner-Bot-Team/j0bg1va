@@ -16,13 +16,14 @@
 */
 import http from 'http';
 
-const PORT = process.env.PORT || 8080;
+const PORT = parseInt(process.env.PORT || '8080', 10);
 
 const server = http.createServer((req, res) => {
   res.writeHead(200, { 'Content-Type': 'text/plain' });
-  res.end('J0BG1VA ONLINE BEEP BOOP!');
+  res.end('j0bg1va online beepboop!');
 });
 
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
