@@ -40,3 +40,16 @@ export function readTable(database: sqlite.DatabaseSync) {
 export function readJob(database: sqlite.DatabaseSync, jobUuid: string) {
 	return database.prepare(`SELECT * FROM jobs WHERE job_uuid = '${jobUuid}'`).get();
 }
+
+export function editJob(database: sqlite.DatabaseSync, newJob: any[]) {
+	database.exec(`
+		UPDATE jobs
+		SET description = ${newJob[1]}, attachments = ${newJob[2]}, claimant = ${newJob[3]},
+		thread = ${newJob[4]}, deadline = ${newJob[5]}, status = ${newJob[6]}
+		WHERE job_uuid = '${newJob[0]}'
+	`);
+}
+
+export function removeJob(database: sqlite.DatabaseSync, jobUuid: string) {
+	database.exec(`DELETE FROM jobs WHERE job_uuid = ${jobUuid}`);
+}
