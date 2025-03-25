@@ -18,7 +18,7 @@ import http from 'http';
 
 const PORT = parseInt(process.env.PORT || '8080', 10);
 
-const server = http.createServer((req, res) => {
+const server = http.createServer((_req, res) => {
   res.writeHead(200, { 'Content-Type': 'text/plain' });
   res.end('j0bg1va online beepboop!');
 });
