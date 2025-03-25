@@ -11,7 +11,7 @@ export function createTable(database: sqlite.DatabaseSync) {
         description TEXT,
         attachments TEXT,
         claimant TEXT,
-        thread TEXT
+        thread TEXT,
         deadline TEXT,
         status TEXT
       ) STRICT
