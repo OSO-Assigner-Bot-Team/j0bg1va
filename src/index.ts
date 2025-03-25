@@ -19,11 +19,10 @@ import http from 'http';
 const PORT = parseInt(process.env.PORT || '8080', 10);
 
 const server = http.createServer((_req, res) => {
-  res.writeHead(200, { 'Content-Type': 'text/plain' });
-  res.end('j0bg1va online beepboop!');
+	res.writeHead(200, { 'Content-Type': 'text/plain' });
+	res.end('j0bg1va online beepboop!');
 });
 
 server.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+	console.log(`Server running on port ${PORT}`);
 });
-
