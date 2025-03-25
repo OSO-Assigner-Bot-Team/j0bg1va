@@ -34,5 +34,5 @@ export function createJob(
 }
 
 export function readJob(database: sqlite.DatabaseSync, jobUuid: string) {
-	return database.prepare(`SELECT * FROM jobs WHERE job_uuid = ${jobUuid}`).all();
+	return database.prepare(`SELECT * FROM jobs WHERE job_uuid = '${jobUuid}'`).all();
 }
