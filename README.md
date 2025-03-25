@@ -1,6 +1,22 @@
-Soon:tm:
+# Soon ™️
 
-### Desired Automaton Features:
+## How to install and run:
+
+#### Prerequisites:
+
+install [Yarn](https://yarnpkg.com/) and [Docker](https://www.docker.com/)
+
+then you simply run `yarn install`
+
+#### For docker:
+`yarn build`
+`yarn up`
+
+#### For node:
+`yarn compile`
+`yarn start`
+
+## Desired Automaton Features:
 - [ ] Claim job
 - [ ] Finish job
 - [ ] Create jobs
@@ -14,7 +30,8 @@ Soon:tm:
 - [ ] Track writing credits
 - [ ] VA auditions
 - [ ] Process files after splits are made.
-### Automaton Design:
+  
+## Automaton Design:
 - Discord integration
 - SQlite for database (What ORM?)
 - Google Spreadsheet to input output data. 
@@ -31,7 +48,7 @@ Soon:tm:
 		- exporting: claim
 		- editing: claim
 		- credits: claim/staff
-	- Track in a spreadsheet without a thr
+	- Track in a spreadsheet without a thread
 		- staff: staff
 		- head writers: voted/random
 		- writing: special
@@ -39,11 +56,6 @@ Soon:tm:
 		- voice director: voted
 		- final editing: voted
 		- animatics: staff 
-		- VA - targets one person
-		- Animation - claimable by anyone
-		- Backgrounds
-		- Exporting - handles multiple video files
-		- Audio prep
 - Jobs need stauses
 	- Being Configured
 	- Claimable
