@@ -33,6 +33,10 @@ export function createJob(
 	insert.run(crypto.randomUUID(), description, attachments, claimant, thread, deadline, status);
 }
 
+export function readTable(database: sqlite.DatabaseSync) {
+	return database.prepare(`SELECT * FROM jobs`).all();
+}
+
 export function readJob(database: sqlite.DatabaseSync, jobUuid: string) {
 	return database.prepare(`SELECT * FROM jobs WHERE job_uuid = '${jobUuid}'`).get();
 }
