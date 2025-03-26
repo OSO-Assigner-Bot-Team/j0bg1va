@@ -14,4 +14,11 @@ create "Service Accounts" keys in https://console.cloud.google.com/apis/credenti
 
 make sure you don't commit them as they have different filenames
 
-Where did I enable the scope?
+rename the keys to credential.json or add the name to .gitignore
+
+Where did I enable the scope? Custom roles or something. https://cloud.google.com/iam/docs/creating-custom-roles
+
+## Documentations
+
+https://developers.google.com/drive/api/guides/about-sdk
+
