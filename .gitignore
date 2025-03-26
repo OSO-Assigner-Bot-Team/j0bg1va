@@ -5,6 +5,7 @@ jobs.db
 # Google API keys
 
 client_secret_*.json
+credential_*.json
 
 # Built .js files
 *.js
