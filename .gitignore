@@ -1,6 +1,11 @@
 # Database
 jobs.db
 
+
+# Google API keys
+
+client_secret_*.json
+
 # Built .js files
 *.js
 
