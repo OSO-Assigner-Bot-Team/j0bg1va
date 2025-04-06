@@ -1,4 +1,5 @@
 import sqlite from 'node:sqlite';
+import { Job } from '#root/interfaces/job';
 
 export function createDb(dbFile: string) {
 	return new sqlite.DatabaseSync(dbFile);
@@ -18,38 +19,30 @@ export function createTable(database: sqlite.DatabaseSync) {
   `);
 }
 
-export function createJob(
-	database: sqlite.DatabaseSync,
-	description: string,
-	attachments: string,
-	claimant: string,
-	thread: string,
-	deadline: string,
-	status: string
-) {
+export function createJob(database: sqlite.DatabaseSync, job: Job) {
 	const insert = database.prepare(
 		'INSERT INTO jobs (job_uuid, description, attachments, claimant, thread, deadline, status) VALUES (?, ?, ?, ?, ?, ?, ?)'
 	);
-	insert.run(crypto.randomUUID(), description, attachments, claimant, thread, deadline, status);
+	insert.run(job.uuid, job.description, job.attachments, job.claimant, job.thread, job.deadline, job.status);
 }
 
 export function readTable(database: sqlite.DatabaseSync) {
 	return database.prepare(`SELECT * FROM jobs`).all();
 }
 
-export function readJob(database: sqlite.DatabaseSync, jobUuid: string) {
+export function readJob(database: sqlite.DatabaseSync, jobUuid: Job["uuid"]) {
 	return database.prepare(`SELECT * FROM jobs WHERE job_uuid = '${jobUuid}'`).get();
 }
 
-export function editJob(database: sqlite.DatabaseSync, newJob: any[]) {
+export function editJob(database: sqlite.DatabaseSync, newJob: Job) {
 	database.exec(`
 		UPDATE jobs
-		SET description = ${newJob[1]}, attachments = ${newJob[2]}, claimant = ${newJob[3]},
-		thread = ${newJob[4]}, deadline = ${newJob[5]}, status = ${newJob[6]}
-		WHERE job_uuid = '${newJob[0]}'
+		SET description = ${newJob.description}, attachments = ${newJob.attachments}, claimant = ${newJob.claimant},
+		thread = ${newJob.thread}, deadline = ${newJob.deadline}, status = ${newJob.status}
+		WHERE job_uuid = '${newJob.uuid}'
 	`);
 }
 
-export function removeJob(database: sqlite.DatabaseSync, jobUuid: string) {
+export function removeJob(database: sqlite.DatabaseSync, jobUuid: Job["uuid"]) {
 	database.exec(`DELETE FROM jobs WHERE job_uuid = ${jobUuid}`);
 }
