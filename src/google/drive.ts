@@ -1,62 +1,102 @@
-import { google } from 'googleapis';
-import type { drive_v3 } from 'googleapis';
-import fs from 'fs';
-import dotenv from 'dotenv';
-import { GoogleAuth } from 'google-auth-library';
+// this should only do uploading attachments to google drive for embeds using service account
+// should we use My Drive or Shared Folder IDK
 
-dotenv.config();
+// I give up for now.
 
-const credentials = JSON.parse(fs.readFileSync(process.env.GOOGLE_SECRET_FILENAME ?? '', 'utf8')); //this is lazy usage of ??
+// import { google } from 'googleapis';
+// import type { drive_v3 } from 'googleapis';
+// // import fs from 'fs';
+// import dotenv from 'dotenv';
+// import { OAuth2Client } from 'google-auth-library';
 
-const auth = new google.auth.GoogleAuth({
-	credentials,
-	scopes: [
-		'https://www.googleapis.com/auth/spreadsheets',
-		'https://www.googleapis.com/auth/drive.metadata.readonly',
-		'https://www.googleapis.com/auth/drive',
-	],
-});
+// dotenv.config();
+
+// const credentials = JSON.parse(fs.readFileSync(process.env.GOOGLE_SECRET_FILENAME ?? '', 'utf8')); //this is lazy usage of ??
+
+// const auth = new google.auth.GoogleAuth({
+// 	credentials,
+// 	scopes: [
+// 		'https://www.googleapis.com/auth/spreadsheets',
+// 		'https://www.googleapis.com/auth/drive.metadata.readonly',
+// 		'https://www.googleapis.com/auth/drive', // posibbly restricted scope
+// 	],
+// });
+
+// const auth = new google.auth.OAuth2(
+// 	process.env.CLIENT_ID,
+// 	process.env.CLIENT_SECRET,
+// 	process.env.REDIRECT_URI
+
+// );
+
+// async function listfiles(auth: OAuth2Client)
+// {
+// 	const drive = google.drive({version:'v3', auth});
+// 	// drive.files.list()
+// 	auth.getToken()
+// 	const res = await drive.files.list({
+// 			pageSize: 10,
+// 			fields: 'nextPageToken, files(id, name)',
+// 		});
+// 		if (res.data.files == undefined) {
+// 			throw new TypeError("Baby don't hurt me!"); //fix the error handling
+// 		}
+// 		const files: drive_v3.Schema$File[] = res.data.files;
+// 		if (files.length === 0) {
+// 			console.log('No files found.');
+// 			return;
+// 		}
+	
+// 		console.log('Files:');
+// 		files.map((file) => {
+// 			console.log(`${file.name} (${file.id})`);
+// 		});
+
+// }
+
+// listfiles(auth);
+
 
 // don't run it as every time it will create a new file and fill out the google drive
-async function uploadTestFile(authClient: GoogleAuth) {
-	const drive = google.drive({ version: 'v3', auth: authClient });
+// async function uploadTestFile(authClient: GoogleAuth) {
+// 	const drive = google.drive({ version: 'v3', auth: authClient });
 
-	const requestBody = {
-		name: 'object-yellow.png',
-		fields: 'id',
-	};
-	const media = {
-		mimeType: 'image/png',
-		body: fs.createReadStream('files/object-yellow.png'),
-	};
+// 	const requestBody = {
+// 		name: 'object-yellow.png',
+// 		fields: 'id',
+// 	};
+// 	const media = {
+// 		mimeType: 'image/png',
+// 		body: fs.createReadStream('files/object-yellow.png'),
+// 	};
 
-	// as per documentation this should be used for files smaller than 5MB
-	const file = await drive.files.create({
-		requestBody,
-		media: media,
-	});
-	console.log('File Id:', file.data.id);
-}
+// 	// as per documentation this should be used for files smaller than 5MB
+// 	const file = await drive.files.create({
+// 		requestBody,
+// 		media: media,
+// 	});
+// 	console.log('File Id:', file.data.id);
+// }
 
-async function listFiles(authClient: GoogleAuth) {
-	const drive = google.drive({ version: 'v3', auth: authClient });
-	const res = await drive.files.list({
-		pageSize: 10,
-		fields: 'nextPageToken, files(id, name)',
-	});
-	if (res.data.files == undefined) {
-		throw new TypeError("Baby don't hurt me!"); //fix the error handling
-	}
-	const files: drive_v3.Schema$File[] = res.data.files;
-	if (files.length === 0) {
-		console.log('No files found.');
-		return;
-	}
+// async function listFiles(authClient: GoogleAuth) {
+// 	const drive = google.drive({ version: 'v3', auth: authClient });
+// 	const res = await drive.files.list({
+// 		pageSize: 10,
+// 		fields: 'nextPageToken, files(id, name)',
+// 	});
+// 	if (res.data.files == undefined) {
+// 		throw new TypeError("Baby don't hurt me!"); //fix the error handling
+// 	}
+// 	const files: drive_v3.Schema$File[] = res.data.files;
+// 	if (files.length === 0) {
+// 		console.log('No files found.');
+// 		return;
+// 	}
 
-	console.log('Files:');
-	files.map((file) => {
-		console.log(`${file.name} (${file.id})`);
-	});
-}
+// 	console.log('Files:');
+// 	files.map((file) => {
+// 		console.log(`${file.name} (${file.id})`);
+// 	});
+// }
 
-uploadTestFile(auth).then(async () => listFiles(auth));
+// listFiles(auth);
