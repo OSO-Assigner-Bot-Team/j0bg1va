@@ -25,5 +25,9 @@
 		"prettier": "^3.5.3",
 		"tsx": "^4.19.3",
 		"typescript": "^5.8.2"
+	},
+	"dependencies": {
+		"discord.js": "^14.18.0",
+		"dotenv": "^16.4.7"
 	}
 }

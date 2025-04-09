@@ -14,8 +14,13 @@
 	@name ts-docker-template
 	
 */
+import { Client, Events, GatewayIntentBits } from 'discord.js';
+import dotenv from 'dotenv';
 import http from 'http';
 
+dotenv.config();
+
+const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 const PORT = parseInt(process.env.PORT || '8080', 10);
 
 const server = http.createServer((_req, res) => {
@@ -26,3 +31,9 @@ const server = http.createServer((_req, res) => {
 server.listen(PORT, () => {
 	console.log(`Server running on port ${PORT}`);
 });
+
+client.once(Events.ClientReady, (readyClient: { user: { tag: any; }; }) => {
+	console.log(`Ready! Logged in as ${readyClient.user.tag}`);
+});
+
+client.login(process.env.TOKEN);
