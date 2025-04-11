@@ -17,6 +17,7 @@
 import { Client, Events, GatewayIntentBits } from 'discord.js';
 import dotenv from 'dotenv';
 import http from 'http';
+import { createDb, createTable } from './database/db.js';
 
 dotenv.config();
 
@@ -31,6 +32,9 @@ const server = http.createServer((_req, res) => {
 server.listen(PORT, () => {
 	console.log(`Server running on port ${PORT}`);
 });
+
+const database = createDb('jobs.db');
+createTable(database);
 
 client.once(Events.ClientReady, (readyClient: { user: { tag: any; }; }) => {
 	console.log(`Ready! Logged in as ${readyClient.user.tag}`);
