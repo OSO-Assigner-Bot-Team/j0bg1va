@@ -15,7 +15,7 @@ const SCOPES = [
 	'https://www.googleapis.com/auth/drive.metadata.readonly',
 ];
 
-async function setUpGoogleSheets() {
+export async function setUpGoogleSheets() {
 	// initialize the google auth to this specific bot
 	const oAuth2Client = new google.auth.OAuth2(
 		process.env.CLIENT_ID,
