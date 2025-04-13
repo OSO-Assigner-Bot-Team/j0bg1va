@@ -4,7 +4,10 @@ import { google } from 'googleapis';
 // import type { drive_v3 } from 'googleapis';
 // import { OAuth2Client } from 'google-auth-library';
 
-const SCOPES = '';
+const SCOPES = [
+	'https://www.googleapis.com/auth/spreadsheets',
+	'https://www.googleapis.com/auth/drive.metadata.readonly',
+];
 
 async function setUpGoogleSheets() {
 	// initialize the google auth to this specific bot
@@ -24,20 +27,16 @@ async function setUpGoogleSheets() {
 	console.log(authLink);
 	// TODO user input the code through slash command or in a DM
 	let code: string;
-	oAuth2Client.getToken(code)
+	oAuth2Client.getToken(code);
 	// TODO refresh token when expired
 
 	// TODO create google sheets file if not present
-	
-	// TODO Create a template for tables inside sheets 
+
+	// TODO Create a template for tables inside sheets
 
 	// TODO upload data to sheets
 
 	// TODO handle job creation
-
-
-
-
 }
 
 // const oAuth2Client = new google.auth.OAuth2(process.env.CLIENT_ID, process.env.CLIENT_SECRET, process.env.REDIRECT_URI)
