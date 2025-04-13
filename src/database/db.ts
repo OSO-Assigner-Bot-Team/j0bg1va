@@ -30,7 +30,7 @@ export function readTable(database: sqlite.DatabaseSync) {
 	return database.prepare(`SELECT * FROM jobs`).all();
 }
 
-export function readJob(database: sqlite.DatabaseSync, jobUuid: Job["uuid"]) {
+export function readJob(database: sqlite.DatabaseSync, jobUuid: Job['uuid']) {
 	return database.prepare(`SELECT * FROM jobs WHERE job_uuid = '${jobUuid}'`).get();
 }
 
@@ -43,6 +43,6 @@ export function editJob(database: sqlite.DatabaseSync, newJob: Job) {
 	`);
 }
 
-export function removeJob(database: sqlite.DatabaseSync, jobUuid: Job["uuid"]) {
+export function removeJob(database: sqlite.DatabaseSync, jobUuid: Job['uuid']) {
 	database.exec(`DELETE FROM jobs WHERE job_uuid = ${jobUuid}`);
 }

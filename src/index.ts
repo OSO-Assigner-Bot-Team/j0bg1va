@@ -18,6 +18,9 @@ import { Client, Events, GatewayIntentBits } from 'discord.js';
 import dotenv from 'dotenv';
 import http from 'http';
 import { createDb, createTable } from './database/db.js';
+import { createThread } from './discord/threads.js';
+import { Job } from '#root/interfaces/job';
+import { Status } from './enums/status.js';
 
 dotenv.config();
 
@@ -36,8 +39,31 @@ server.listen(PORT, () => {
 const database = createDb('jobs.db');
 createTable(database);
 
-client.once(Events.ClientReady, (readyClient: { user: { tag: any; }; }) => {
+client.once(Events.ClientReady, (readyClient: { user: { tag: any } }) => {
 	console.log(`Ready! Logged in as ${readyClient.user.tag}`);
 });
 
 client.login(process.env.TOKEN);
+
+//example job
+
+const testJob: Job = {
+	uuid: 'deadbeef-5ef3-45f2-b31c-88ab7303741c',
+	description: 'This is a test job',
+	attachments:
+		'https://raw.githubusercontent.com/OSO-Assigner-Bot-Team/OSO-Assigner-Bot-Team.github.io/refs/heads/main/images/object-green.png',
+	claimant: '',
+	thread: '',
+	deadline: Date.now().toString(),
+	status: Status.Claimable,
+};
+
+//create thread
+if (process.env.guildId == undefined) {
+	throw new TypeError('guild is undefined');
+}
+const guild = client.guilds.cache.get(process.env.guildId);
+if (guild == undefined) {
+	throw new TypeError('guild is undefined');
+}
+createThread(guild, client, '', testJob);
