@@ -3,6 +3,8 @@
 import { google } from 'googleapis';
 // import type { drive_v3 } from 'googleapis';
 // import { OAuth2Client } from 'google-auth-library';
+import { ReadLine, createInterface} from 'readline';
+
 
 const SCOPES = [
 	'https://www.googleapis.com/auth/spreadsheets',
@@ -26,8 +28,20 @@ async function setUpGoogleSheets() {
 	// TODO send in discord DM the link to auth the automaton
 	console.log(authLink);
 	// TODO user input the code through slash command or in a DM
+	
 	let code: string;
-	oAuth2Client.getToken(code);
+
+	let rl:ReadLine = createInterface({
+		input: process.stdin,
+		output: process.stdout
+	  });
+	
+	rl.question(authLink,(answer) => {
+		code = answer;
+		oAuth2Client.getToken(code);
+	})
+
+	
 	// TODO refresh token when expired
 
 	// TODO create google sheets file if not present
@@ -80,3 +94,5 @@ async function setUpGoogleSheets() {
 //     if (error) {
 //       return
 //     }
+
+setUpGoogleSheets()
