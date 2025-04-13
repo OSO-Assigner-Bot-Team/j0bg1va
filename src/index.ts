@@ -59,10 +59,10 @@ const testJob: Job = {
 };
 
 //create thread
-// if (process.env.guildId === undefined) {
+// if (process.env.GUILD_ID === undefined) {
 // 	throw new TypeError('guild is undefined');
 // }
-// const guild = client.guilds.cache.get(process.env.guildId);
+// const guild = client.guilds.cache.get(process.env.GUILD_ID);
 // if (guild === undefined) {
 // 	throw new TypeError('guild is undefined');
 // }
