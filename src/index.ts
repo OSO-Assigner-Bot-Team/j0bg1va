@@ -21,6 +21,7 @@ import { createDb, createTable } from './database/db.js';
 import { createThread } from './discord/threads.js';
 import { Job } from '#root/interfaces/job';
 import { Status } from './enums/status.js';
+import { setUpGoogleSheets } from './google/sheets.js';
 
 dotenv.config();
 
@@ -28,8 +29,26 @@ const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 const PORT = parseInt(process.env.PORT || '8080', 10);
 
 const server = http.createServer((_req, res) => {
-	res.writeHead(200, { 'Content-Type': 'text/plain' });
-	res.end('j0bg1va online beepboop!');
+	res.writeHead(200, { 'Content-Type': 'text/html' });
+	res.end(`<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+	<p>
+    <script>
+        const codeParam = new URLSearchParams(document.location.search).get('code');
+        const codeDiv = document.createElement('div').appendChild(document.createTextNode(codeParam));
+        document.body.insertBefore(codeDiv, null);
+    </script>
+	</p>
+	<p>
+	<b>AUTOMATON IS ONLINE</b>
+	</p>
+</body>
+</html>`);
 });
 
 server.listen(PORT, () => {
@@ -71,3 +90,5 @@ try {
 } catch (error) {
 	console.log(error);
 }
+
+setUpGoogleSheets();

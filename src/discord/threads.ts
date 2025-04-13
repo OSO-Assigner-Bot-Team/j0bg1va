@@ -6,15 +6,15 @@ dotenv.config();
 
 export async function createThread(client: Client, job: Job) {
 	client.on('ready', async () => {
-		if (process.env.forumId === undefined) {
-			throw new TypeError('add forumId to dotenv!');
+		if (process.env.FORUM_ID === undefined) {
+			throw new TypeError('add FORUM_ID to dotenv!');
 		}
 		// let guild = client.guilds.cache.get(process.env.guildId)
 		// if (guild === undefined) {
 		// 	throw new TypeError('guild is undefined');
 		// }
 		// let forum = new ForumChannel(guild,);
-		client.channels.fetch(process.env.forumId).then(async (channel) => {
+		client.channels.fetch(process.env.FORUM_ID).then(async (channel) => {
 			if (channel?.type !== ChannelType.GuildForum) {
 				throw new TypeError('channel is ' + channel);
 			}

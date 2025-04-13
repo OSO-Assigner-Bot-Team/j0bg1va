@@ -16,7 +16,8 @@
 		"declarationMap": false,
 		"incremental": false,
 		"listFiles": false,
-		"listEmittedFiles": true
+		"listEmittedFiles": true,
+		"noUnusedLocals": true
 	},
 	"exclude": ["dist", "node_modules"]
 }
