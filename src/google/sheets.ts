@@ -22,10 +22,22 @@ async function setUpGoogleSheets() {
 
 	// TODO send in discord DM the link to auth the automaton
 	console.log(authLink);
-	// TODO receive the code through slash command or in a DM
-	let token;
+	// TODO user input the code through slash command or in a DM
+	let code: string;
+	oAuth2Client.getToken(code)
+	// TODO refresh token when expired
 
-	// TODO
+	// TODO create google sheets file if not present
+	
+	// TODO Create a template for tables inside sheets 
+
+	// TODO upload data to sheets
+
+	// TODO handle job creation
+
+
+
+
 }
 
 // const oAuth2Client = new google.auth.OAuth2(process.env.CLIENT_ID, process.env.CLIENT_SECRET, process.env.REDIRECT_URI)
