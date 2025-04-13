@@ -23,12 +23,12 @@ export async function createThread(client: Client, job: Job) {
 				name: job.description,
 				message: {
 					content: `
-						ID: ${job.uuid}
-						Description: ${job.description}
-						Attachments: ${job.attachments}
-						Claimant: ${job.claimant}
-						Deadline: ${job.deadline}
-						Status: ${job.status}`,
+ID: ${job.uuid}
+Description: ${job.description}
+Attachments: ${job.attachments}
+Claimant: ${job.claimant}
+Deadline: ${job.deadline}
+Status: ${job.status}`,
 				},
 			});
 
