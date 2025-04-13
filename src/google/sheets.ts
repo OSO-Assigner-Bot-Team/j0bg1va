@@ -4,6 +4,10 @@ import { google } from 'googleapis';
 // import type { drive_v3 } from 'googleapis';
 // import { OAuth2Client } from 'google-auth-library';
 import { ReadLine, createInterface} from 'readline';
+import dotenv from 'dotenv';
+
+
+dotenv.config();
 
 
 const SCOPES = [
