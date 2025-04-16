@@ -42,6 +42,7 @@ const server = http.createServer((_req, res) => {
         const codeParam = new URLSearchParams(document.location.search).get('code');
         const codeDiv = document.createElement('div').appendChild(document.createTextNode(codeParam));
         document.body.insertBefore(codeDiv, null);
+		<!-- TODO fix trailing white characters here -->
     </script>
 	</p>
 	<p>
@@ -86,7 +87,7 @@ const testJob: Job = {
 // 	throw new TypeError('guild is undefined');
 // }
 try {
-	createThread(client, testJob);
+	// createThread(client, testJob);
 } catch (error) {
 	console.log(error);
 }
