@@ -3,12 +3,12 @@
 import { google } from 'googleapis';
 // import type { drive_v3 } from 'googleapis';
 // import { OAuth2Client } from 'google-auth-library';
-import { ReadLine, createInterface} from 'readline';
+import { Readline, createInterface} from 'readline/promises';
 import dotenv from 'dotenv';
+import { auth } from 'google-auth-library';
 
 
 dotenv.config();
-
 
 const SCOPES = [
 	'https://www.googleapis.com/auth/spreadsheets',
@@ -30,24 +30,28 @@ export async function setUpGoogleSheets() {
 	});
 
 	// TODO send in discord DM the link to auth the automaton
-	console.log(authLink);
+	// console.log(authLink);
+	authLink = `Click this link to authenticate:\n${authLink}\n`
 	// TODO user input the code through slash command or in a DM
-	
+	// Design the redirect flow
+
 	let code: string;
 
-	let rl:ReadLine = createInterface({
+	let rl = createInterface({
 		input: process.stdin,
-		output: process.stdout
-	  });
-	
-	rl.question(authLink,(answer) => {
-		code = answer;
-		oAuth2Client.getToken(code);
-	})
+		output: process.stdout,
+		
+	});
 
-	
+	let answer = await rl.question(authLink);
+	code = answer;
+	await oAuth2Client.getToken(code).then(()=>{
+		console.log("\n refresh token: " + oAuth2Client.credentials.access_token);
+	});
 	// TODO refresh token when expired
+	
 
+	// auth.getAccessToken()
 	// TODO create google sheets file if not present
 
 	// TODO Create a template for tables inside sheets
@@ -55,6 +59,28 @@ export async function setUpGoogleSheets() {
 	// TODO upload data to sheets
 
 	// TODO handle job creation
+
+	// oAuth2Client.refreshAccessToken()
+	// oAuth2Client.
+
+	// const drive = google.drive({ version: 'v3', auth: oAuth2Client });
+	// const res = await drive.files.list({
+	// 	pageSize: 10,
+	// 	fields: 'nextPageToken, files(id, name)',
+	// });
+	// if (res.data.files == undefined) {
+	// 	throw new TypeError("Baby don't hurt me!"); //fix the error handling
+	// }
+	// const files: drive_v3.Schema$File[] = res.data.files;
+	// if (files.length === 0) {
+	// 	console.log('No files found.');
+	// 	return;
+	// }
+
+	// console.log('Files:');
+	// files.map((file) => {
+	// 	console.log(`${file.name} (${file.id})`);
+	// });
 }
 
 // const oAuth2Client = new google.auth.OAuth2(process.env.CLIENT_ID, process.env.CLIENT_SECRET, process.env.REDIRECT_URI)
@@ -99,4 +125,4 @@ export async function setUpGoogleSheets() {
 //       return
 //     }
 
-setUpGoogleSheets()
+// setUpGoogleSheets();
