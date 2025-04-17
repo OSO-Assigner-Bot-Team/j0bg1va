@@ -1,7 +1,7 @@
 //this should use Oauth2 to display google sheets inside personal google drive
 
 import { google } from 'googleapis';
-// import type { drive_v3 } from 'googleapis';
+import type { drive_v3 } from 'googleapis';
 // import { OAuth2Client } from 'google-auth-library';
 import { Readline, createInterface} from 'readline/promises';
 import dotenv from 'dotenv';
@@ -45,10 +45,10 @@ export async function setUpGoogleSheets() {
 
 	let answer = await rl.question(authLink);
 	code = answer;
-	await oAuth2Client.getToken(code).then(()=>{
-		console.log("\n refresh token: " + oAuth2Client.credentials.access_token);
-	});
+	let { tokens } = await oAuth2Client.getToken(code);
 	// TODO refresh token when expired
+	
+	oAuth2Client.credentials = tokens
 	
 
 	// auth.getAccessToken()
@@ -63,24 +63,24 @@ export async function setUpGoogleSheets() {
 	// oAuth2Client.refreshAccessToken()
 	// oAuth2Client.
 
-	// const drive = google.drive({ version: 'v3', auth: oAuth2Client });
-	// const res = await drive.files.list({
-	// 	pageSize: 10,
-	// 	fields: 'nextPageToken, files(id, name)',
-	// });
-	// if (res.data.files == undefined) {
-	// 	throw new TypeError("Baby don't hurt me!"); //fix the error handling
-	// }
-	// const files: drive_v3.Schema$File[] = res.data.files;
-	// if (files.length === 0) {
-	// 	console.log('No files found.');
-	// 	return;
-	// }
+	const drive = google.drive({ version: 'v3', auth: oAuth2Client });
+	const res = await drive.files.list({
+		pageSize: 10,
+		fields: 'nextPageToken, files(id, name)',
+	});
+	if (res.data.files == undefined) {
+		throw new TypeError("Baby don't hurt me!"); //fix the error handling
+	}
+	const files: drive_v3.Schema$File[] = res.data.files;
+	if (files.length === 0) {
+		console.log('No files found.');
+		return;
+	}
 
-	// console.log('Files:');
-	// files.map((file) => {
-	// 	console.log(`${file.name} (${file.id})`);
-	// });
+	console.log('Files:');
+	files.map((file) => {
+		console.log(`${file.name} (${file.id})`);
+	});
 }
 
 // const oAuth2Client = new google.auth.OAuth2(process.env.CLIENT_ID, process.env.CLIENT_SECRET, process.env.REDIRECT_URI)
