@@ -5,7 +5,7 @@ import type { drive_v3 } from 'googleapis';
 // import { OAuth2Client } from 'google-auth-library';
 import { Readline, createInterface} from 'readline/promises';
 import dotenv from 'dotenv';
-import { auth } from 'google-auth-library';
+import { auth, OAuth2Client } from 'google-auth-library';
 
 
 dotenv.config();
@@ -46,12 +46,11 @@ export async function setUpGoogleSheets() {
 	let answer = await rl.question(authLink);
 	code = answer;
 	let { tokens } = await oAuth2Client.getToken(code);
-	// TODO refresh token when expired
-	
 	oAuth2Client.credentials = tokens
 	
+	// TODO refresh token when expired
+	setInterval(function() {refreshToken(oAuth2Client)},10000);
 
-	// auth.getAccessToken()
 	// TODO create google sheets file if not present
 
 	// TODO Create a template for tables inside sheets
@@ -81,6 +80,23 @@ export async function setUpGoogleSheets() {
 	files.map((file) => {
 		console.log(`${file.name} (${file.id})`);
 	});
+}
+
+function refreshToken(oAuth2Client: OAuth2Client){
+	if(oAuth2Client.credentials.expiry_date == null ){
+		throw new TypeError('google auth expiry date not set');
+	};
+	let expiresAt: Date = new Date(oAuth2Client.credentials.expiry_date);
+	let expiresIn: number = expiresAt.getTime() - Date.now();
+	if(expiresIn < 30001){
+		oAuth2Client.refreshAccessToken();
+		console.log(`\ntriggered token refresh\nold expires at(ms): ${expiresAt}\nnew expires at(ms):${oAuth2Client.credentials.expiry_date}\n`);
+	}
+	if(expiresIn > 3540000){
+		console.log(`*`)
+	}
+
+
 }
 
 // const oAuth2Client = new google.auth.OAuth2(process.env.CLIENT_ID, process.env.CLIENT_SECRET, process.env.REDIRECT_URI)
