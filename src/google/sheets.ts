@@ -13,6 +13,7 @@ dotenv.config();
 const SCOPES = [
 	'https://www.googleapis.com/auth/spreadsheets',
 	'https://www.googleapis.com/auth/drive.metadata.readonly',
+	'https://www.googleapis.com/auth/userinfo.email'
 ];
 
 export async function setUpGoogleSheets() {
@@ -32,7 +33,7 @@ export async function setUpGoogleSheets() {
 	// TODO send in discord DM the link to auth the automaton
 	// console.log(authLink);
 	authLink = `Click this link to authenticate:\n${authLink}\n`
-	// TODO user input the code through slash command or in a DM
+	// TODO grab a code from a website and associate it with a user. 
 	// Design the redirect flow
 
 	let code: string;
@@ -45,12 +46,23 @@ export async function setUpGoogleSheets() {
 
 	let answer = await rl.question(authLink);
 	code = answer;
+	//covert code into tokens and set them
 	let { tokens } = await oAuth2Client.getToken(code);
 	oAuth2Client.credentials = tokens
 	
-	// TODO refresh token when expired
+	// get user email
+	let user = google.oauth2({
+		auth: oAuth2Client,
+		version: 'v2'
+	});
+	let userinfo = await user.userinfo.get()
+	console.log(`\nYou are logged in as: ${userinfo.data.email}`);
+
+	// refresh token when expired
 	setInterval(function() {refreshToken(oAuth2Client)},10000);
 
+	// TODO save the credentials to disk
+	
 	// TODO create google sheets file if not present
 
 	// TODO Create a template for tables inside sheets
@@ -61,25 +73,27 @@ export async function setUpGoogleSheets() {
 
 	// oAuth2Client.refreshAccessToken()
 	// oAuth2Client.
+	setInterval(async function() {
+		console.log(Date.now())
+		const drive = google.drive({ version: 'v3', auth: oAuth2Client });
+		const res = await drive.files.list({
+			pageSize: 10,
+			fields: 'nextPageToken, files(id, name)',
+		});
+		if (res.data.files == undefined) {
+			throw new TypeError("Baby don't hurt me!"); //fix the error handling
+		}
+		const files: drive_v3.Schema$File[] = res.data.files;
+		if (files.length === 0) {
+			console.log('No files found.');
+			return;
+		}
 
-	const drive = google.drive({ version: 'v3', auth: oAuth2Client });
-	const res = await drive.files.list({
-		pageSize: 10,
-		fields: 'nextPageToken, files(id, name)',
-	});
-	if (res.data.files == undefined) {
-		throw new TypeError("Baby don't hurt me!"); //fix the error handling
-	}
-	const files: drive_v3.Schema$File[] = res.data.files;
-	if (files.length === 0) {
-		console.log('No files found.');
-		return;
-	}
-
-	console.log('Files:');
-	files.map((file) => {
-		console.log(`${file.name} (${file.id})`);
-	});
+		console.log('Files:');
+		files.map((file) => {
+			console.log(`${file.name} (${file.id})`);
+		});
+	},600000);
 }
 
 function refreshToken(oAuth2Client: OAuth2Client){
@@ -92,8 +106,8 @@ function refreshToken(oAuth2Client: OAuth2Client){
 		oAuth2Client.refreshAccessToken();
 		console.log(`\ntriggered token refresh\nold expires at(ms): ${expiresAt}\nnew expires at(ms):${oAuth2Client.credentials.expiry_date}\n`);
 	}
-	if(expiresIn > 3540000){
-		console.log(`*`)
+	if(expiresIn > 3500000){
+		console.log(`heartbeat: ${Date.now()}`)
 	}
 
 
