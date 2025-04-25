@@ -5,7 +5,9 @@ import type { drive_v3 } from 'googleapis';
 // import { OAuth2Client } from 'google-auth-library';
 import { Readline, createInterface} from 'readline/promises';
 import dotenv from 'dotenv';
-import { auth, OAuth2Client } from 'google-auth-library';
+import { auth, Credentials, OAuth2Client } from 'google-auth-library';
+import * as fs from 'fs/promises';
+import { error } from 'console';
 
 
 dotenv.config();
@@ -16,14 +18,63 @@ const SCOPES = [
 	'https://www.googleapis.com/auth/userinfo.email'
 ];
 
-export async function setUpGoogleSheets() {
-	// initialize the google auth to this specific bot
-	const oAuth2Client = new google.auth.OAuth2(
-		process.env.CLIENT_ID,
-		process.env.CLIENT_SECRET,
-		process.env.REDIRECT_URI
-	);
+async function load_saved_credentials(oAuth2Client: OAuth2Client){
+	try{
+	let saved: Credentials = JSON.parse(await fs.readFile('credential_google.json','utf-8'));
+	//check if refresh token exists
+	if(saved.refresh_token == null){
+		// throw new Error("refresh token doesn't exist");
+		console.log("refresh token doesn't exist");
+		return;
+	}
+	oAuth2Client.setCredentials(saved);
+	return oAuth2Client;
+	}
+	catch(error){
+		console.log(`Error loading the credential from JSON file: ${error}`)
+		return null;
+	}
+};
 
+// 2am stupid name
+async function save_saved_credentials(oAuth2Client: OAuth2Client){
+	await fs.writeFile('credential_google.json',JSON.stringify(oAuth2Client.credentials));
+	console.log('credentials written to file.');
+}
+
+
+
+
+
+
+// function to handle auth flow. for some reason there isn't refresh token present and IDK why. 
+async function authenticate(oAuth2Client: OAuth2Client){
+	
+	let isLoadedFlag:boolean = false;
+
+	load_saved_credentials(oAuth2Client).then( async (value) => { 
+		if(value == null){
+			isLoadedFlag = true;
+		}
+});
+
+	if(isLoadedFlag){
+		await oAuth2Client.refreshAccessToken();
+		// get user email (duplicate code)
+		let user = google.oauth2({
+			auth: oAuth2Client,
+			version: 'v2'
+		});
+		let userinfo = await user.userinfo.get()
+		console.log(`\nYou are logged in as: ${userinfo.data.email}`);
+		save_saved_credentials(oAuth2Client);
+		return;
+	}
+
+
+
+
+	
 	// generate a link for admin to grant permissions for the bot
 	let authLink = oAuth2Client.generateAuthUrl({
 		access_type: 'offline',
@@ -50,18 +101,30 @@ export async function setUpGoogleSheets() {
 	let { tokens } = await oAuth2Client.getToken(code);
 	oAuth2Client.credentials = tokens
 	
-	// get user email
+	// get user email(duplicate code)
 	let user = google.oauth2({
 		auth: oAuth2Client,
 		version: 'v2'
 	});
 	let userinfo = await user.userinfo.get()
 	console.log(`\nYou are logged in as: ${userinfo.data.email}`);
+	save_saved_credentials(oAuth2Client);
+
+
+} 
+
+export async function setUpGoogleSheets() {
+	// initialize the google auth to this specific bot
+	const oAuth2Client = new google.auth.OAuth2(
+		process.env.CLIENT_ID,
+		process.env.CLIENT_SECRET,
+		process.env.REDIRECT_URI
+	);
+
+	await authenticate(oAuth2Client);
 
 	// refresh token when expired
 	setInterval(function() {refreshToken(oAuth2Client)},10000);
-
-	// TODO save the credentials to disk
 	
 	// TODO create google sheets file if not present
 
@@ -98,16 +161,23 @@ export async function setUpGoogleSheets() {
 
 function refreshToken(oAuth2Client: OAuth2Client){
 	if(oAuth2Client.credentials.expiry_date == null ){
-		throw new TypeError('google auth expiry date not set');
+		// throw new TypeError('google auth expiry date not set');
+		console.log('google auth expiry date not set')
+		return;
 	};
 	let expiresAt: Date = new Date(oAuth2Client.credentials.expiry_date);
 	let expiresIn: number = expiresAt.getTime() - Date.now();
 	if(expiresIn < 30001){
 		oAuth2Client.refreshAccessToken();
 		console.log(`\ntriggered token refresh\nold expires at(ms): ${expiresAt}\nnew expires at(ms):${oAuth2Client.credentials.expiry_date}\n`);
+		save_saved_credentials(oAuth2Client);
 	}
 	if(expiresIn > 3500000){
 		console.log(`heartbeat: ${Date.now()}`)
+		//========================
+		//=========DANGER=========
+		//========================
+		// oAuth2Client.credentials.expiry_date = Date.now(); //TESTING FUNCTION REMOVE BEFORE PRODUCTION
 	}
 
 
