@@ -79,6 +79,7 @@ async function authenticate(oAuth2Client: OAuth2Client){
 	let authLink = oAuth2Client.generateAuthUrl({
 		access_type: 'offline',
 		scope: SCOPES,
+		prompt: 'consent'
 	});
 
 	// TODO send in discord DM the link to auth the automaton
@@ -122,6 +123,7 @@ export async function setUpGoogleSheets() {
 	);
 
 	await authenticate(oAuth2Client);
+
 
 	// refresh token when expired
 	setInterval(function() {refreshToken(oAuth2Client)},10000);
@@ -177,7 +179,7 @@ function refreshToken(oAuth2Client: OAuth2Client){
 		//========================
 		//=========DANGER=========
 		//========================
-		// oAuth2Client.credentials.expiry_date = Date.now(); //TESTING FUNCTION REMOVE BEFORE PRODUCTION
+		oAuth2Client.credentials.expiry_date = Date.now(); //TESTING FUNCTION REMOVE BEFORE PRODUCTION
 	}
 
 
