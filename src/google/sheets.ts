@@ -9,7 +9,6 @@ import { auth, Credentials, OAuth2Client } from 'google-auth-library';
 import * as fs from 'fs/promises';
 import { error } from 'console';
 
-
 dotenv.config();
 
 const SCOPES = [
@@ -18,7 +17,7 @@ const SCOPES = [
 	'https://www.googleapis.com/auth/userinfo.email'
 ];
 
-async function load_saved_credentials(oAuth2Client: OAuth2Client){
+async function load_saved_credentials(oAuth2Client: OAuth2Client) {
 	try{
 	let saved: Credentials = JSON.parse(await fs.readFile('credential_google.json','utf-8'));
 	//check if refresh token exists
@@ -37,20 +36,15 @@ async function load_saved_credentials(oAuth2Client: OAuth2Client){
 };
 
 // 2am stupid name
-async function save_saved_credentials(oAuth2Client: OAuth2Client){
+async function save_saved_credentials(oAuth2Client: OAuth2Client) {
 	await fs.writeFile('credential_google.json',JSON.stringify(oAuth2Client.credentials));
 	console.log('credentials written to file.');
 }
 
-
-
-
-
-
 // function to handle auth flow. for some reason there isn't refresh token present and IDK why. 
-async function authenticate(oAuth2Client: OAuth2Client){
+async function authenticate(oAuth2Client: OAuth2Client) {
 	
-	let isLoadedFlag:boolean = false;
+	let isLoadedFlag: boolean = false;
 
 	load_saved_credentials(oAuth2Client).then( async (value) => { 
 		if(value == null){
@@ -58,7 +52,7 @@ async function authenticate(oAuth2Client: OAuth2Client){
 		}
 });
 
-	if(isLoadedFlag){
+	if (isLoadedFlag) {
 		await oAuth2Client.refreshAccessToken();
 		// get user email (duplicate code)
 		let user = google.oauth2({
@@ -70,10 +64,6 @@ async function authenticate(oAuth2Client: OAuth2Client){
 		save_saved_credentials(oAuth2Client);
 		return;
 	}
-
-
-
-
 	
 	// generate a link for admin to grant permissions for the bot
 	let authLink = oAuth2Client.generateAuthUrl({
@@ -84,7 +74,7 @@ async function authenticate(oAuth2Client: OAuth2Client){
 
 	// TODO send in discord DM the link to auth the automaton
 	// console.log(authLink);
-	authLink = `Click this link to authenticate:\n${authLink}\n`
+	authLink = `Click this link to authenticate:\n${authLink}\n`;
 	// TODO grab a code from a website and associate it with a user. 
 	// Design the redirect flow
 
@@ -98,20 +88,20 @@ async function authenticate(oAuth2Client: OAuth2Client){
 
 	let answer = await rl.question(authLink);
 	code = answer;
-	//covert code into tokens and set them
+
+	// convert code into tokens and set them
 	let { tokens } = await oAuth2Client.getToken(code);
-	oAuth2Client.credentials = tokens
+	oAuth2Client.credentials = tokens;
 	
 	// get user email(duplicate code)
 	let user = google.oauth2({
 		auth: oAuth2Client,
 		version: 'v2'
 	});
+
 	let userinfo = await user.userinfo.get()
 	console.log(`\nYou are logged in as: ${userinfo.data.email}`);
 	save_saved_credentials(oAuth2Client);
-
-
 } 
 
 export async function setUpGoogleSheets() {
@@ -124,9 +114,8 @@ export async function setUpGoogleSheets() {
 
 	await authenticate(oAuth2Client);
 
-
 	// refresh token when expired
-	setInterval(function() {refreshToken(oAuth2Client)},10000);
+	setInterval(function() { refreshToken(oAuth2Client) }, 10000);
 	
 	// TODO create google sheets file if not present
 
@@ -146,8 +135,9 @@ export async function setUpGoogleSheets() {
 			fields: 'nextPageToken, files(id, name)',
 		});
 		if (res.data.files == undefined) {
-			throw new TypeError("Baby don't hurt me!"); //fix the error handling
+			throw new TypeError("Baby don't hurt me!"); // fix the error handling
 		}
+
 		const files: drive_v3.Schema$File[] = res.data.files;
 		if (files.length === 0) {
 			console.log('No files found.');
@@ -158,31 +148,31 @@ export async function setUpGoogleSheets() {
 		files.map((file) => {
 			console.log(`${file.name} (${file.id})`);
 		});
-	},600000);
+	}, 600000);
 }
 
-function refreshToken(oAuth2Client: OAuth2Client){
+function refreshToken(oAuth2Client: OAuth2Client) {
 	if(oAuth2Client.credentials.expiry_date == null ){
 		// throw new TypeError('google auth expiry date not set');
 		console.log('google auth expiry date not set')
 		return;
 	};
+
 	let expiresAt: Date = new Date(oAuth2Client.credentials.expiry_date);
 	let expiresIn: number = expiresAt.getTime() - Date.now();
-	if(expiresIn < 30001){
+
+	if(expiresIn < 30001) {
 		oAuth2Client.refreshAccessToken();
 		console.log(`\ntriggered token refresh\nold expires at(ms): ${expiresAt}\nnew expires at(ms):${oAuth2Client.credentials.expiry_date}\n`);
 		save_saved_credentials(oAuth2Client);
 	}
-	if(expiresIn > 3500000){
+	if(expiresIn > 3500000) {
 		console.log(`heartbeat: ${Date.now()}`)
 		//========================
 		//=========DANGER=========
 		//========================
-		oAuth2Client.credentials.expiry_date = Date.now(); //TESTING FUNCTION REMOVE BEFORE PRODUCTION
+		oAuth2Client.credentials.expiry_date = Date.now(); // TESTING FUNCTION REMOVE BEFORE PRODUCTION
 	}
-
-
 }
 
 // const oAuth2Client = new google.auth.OAuth2(process.env.CLIENT_ID, process.env.CLIENT_SECRET, process.env.REDIRECT_URI)
