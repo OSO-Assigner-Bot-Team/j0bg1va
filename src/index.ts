@@ -63,7 +63,7 @@ client.once(Events.ClientReady, (readyClient: { user: { tag: any } }) => {
 	console.log(`Ready! Logged in as ${readyClient.user.tag}`);
 });
 
-client.login(process.env.TOKEN);
+client.login(process.env.DISCORD_TOKEN);
 
 //example job
 
