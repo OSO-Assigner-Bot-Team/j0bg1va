@@ -25,6 +25,8 @@ import { setUpGoogleSheets } from './google/sheets.js';
 
 dotenv.config();
 
+console.log("DISCORD_TOKEN is", process.env.DISCORD_TOKEN ? "SET" : "NOT SET");
+
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 const PORT = parseInt(process.env.PORT || '8080', 10);
 
